@@ -47,7 +47,7 @@ public class UserController {
     public Result info(){
         Long userId = StpUtil.getLoginIdAsLong();
         UserEntity user = userService.getById(userId);
-        return Result.ok(user);
+        return Result.success(user);
     }
 
 
