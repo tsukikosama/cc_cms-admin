@@ -55,6 +55,6 @@ public class UserController {
     @GetMapping("logout")
     public Result logout() {
         StpUtil.logout();
-        return Result.ok();
+        return Result.success();
     }
 }
