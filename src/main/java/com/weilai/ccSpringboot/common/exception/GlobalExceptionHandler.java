@@ -22,13 +22,13 @@ public class GlobalExceptionHandler {
         @ExceptionHandler(CustomException.class)
         public Result bizExceptionHandler(CustomException e) {
             log.error("【业务异常】: {}", e.getMessage());
-            return Result.fail(e.getMessage(),1);
+            return Result.failure(1,e.getMessage());
         }
 
         @ExceptionHandler(NotLoginException.class)
         public Result notLoginExceptionExceptionHandler(NotLoginException e) {
             log.error("【登录异常】: {}", ExceptionUtils.getStackTrace(e));
-            return Result.fail( e.getMessage(),401);
+            return Result.failure( 401, e.getMessage());
         }
 
         @ExceptionHandler(BindException.class)
@@ -37,9 +37,9 @@ public class GlobalExceptionHandler {
             BindingResult result = e.getBindingResult();
             if (result instanceof BeanPropertyBindingResult) {
                 String msg = result.getFieldErrors().get(0).getDefaultMessage();
-                return Result.fail( msg,1);
+                return Result.failure( 1,msg);
             } else {
-                return Result.fail( "系统异常，请联系管理员",500);
+                return Result.failure( 500,"系统异常，请联系管理员");
             }
         }
         /**
@@ -56,21 +56,21 @@ public class GlobalExceptionHandler {
                 // 参数检验异常
                 MethodArgumentNotValidException methodArgumentNotValidException = (MethodArgumentNotValidException) e;
                 BindingResult result = methodArgumentNotValidException.getBindingResult();
-                return Result.fail(result.getFieldErrors().get(0).getDefaultMessage(),500);
+                return Result.failure(500,result.getFieldErrors().get(0).getDefaultMessage());
             } else if (e instanceof HttpRequestMethodNotSupportedException) {
-                return Result.fail("请求方法不正确",500);
+                return Result.failure(500,"请求方法不正确");
             } else if (e instanceof MissingServletRequestParameterException) {
                 MissingServletRequestParameterException ex = (MissingServletRequestParameterException) e;
-                return Result.fail("请求参数缺少: " + ex.getParameterName(),500);
+                return Result.failure(500,"请求参数缺少: " + ex.getParameterName());
             } else if (e instanceof MethodArgumentTypeMismatchException) {
                 MethodArgumentTypeMismatchException ex = (MethodArgumentTypeMismatchException) e;
-                return Result.fail("请求参数类型不正确：" + ex.getName(),500);
+                return Result.failure(500,"请求参数类型不正确：" + ex.getName());
             } else if (e instanceof NoHandlerFoundException) {
                 NoHandlerFoundException ex = (NoHandlerFoundException) e;
-                return Result.fail( ex.getRequestURL(),500);
+                return Result.failure( 500,ex.getRequestURL());
             } else {
                 log.error("【系统异常】: {}", ExceptionUtils.getStackTrace(e));
-                return Result.fail( "系统异常，请联系管理员",500);
+                return Result.failure( 500,"系统异常，请联系管理员");
             }
         }
 

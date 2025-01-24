@@ -40,7 +40,7 @@ public class UserController {
         SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
         Map<String, Object> data = new HashMap<>();
         data.put("token", tokenInfo.getTokenValue());
-        return Result.ok(data);
+        return Result.success(data);
     }
 
     @GetMapping("/info")
